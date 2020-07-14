@@ -50,12 +50,12 @@ export default defineComponent({
   },
   setup() {
     const inputRef = ref<any>()
-    const emailVal = ref('')
+    const emailVal = ref('123@test.com')
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱地址不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱格式' }
     ]
-    const passwordVal = ref('')
+    const passwordVal = ref('123')
     const passwordRules: RulesProp = [
       { type: 'required', message: '密码不能为空' }
     ]
