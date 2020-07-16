@@ -28,7 +28,6 @@ export default defineComponent({
   },
   inheritAttrs: false,
   setup(props, context) {
-    console.log(context.attrs)
     const inputRef = reactive({
       val: props.modelValue || '',
       error: false,
@@ -62,7 +61,7 @@ export default defineComponent({
       return true
     }
     onMounted(() => {
-      emitter.emit('form-item-created', inputRef.val)
+      emitter.emit('form-item-created', validateInput)
     })
     return {
       inputRef,

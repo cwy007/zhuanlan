@@ -49,18 +49,17 @@ export default defineComponent({
     ValidateForm
   },
   setup() {
-    const inputRef = ref<any>()
-    const emailVal = ref('123@test.com')
+    const emailVal = ref('')
     const emailRules: RulesProp = [
       { type: 'required', message: '电子邮箱地址不能为空' },
       { type: 'email', message: '请输入正确的电子邮箱格式' }
     ]
-    const passwordVal = ref('123')
+    const passwordVal = ref('')
     const passwordRules: RulesProp = [
       { type: 'required', message: '密码不能为空' }
     ]
     const onFormSubmit = (result: boolean) => {
-      console.log('result', inputRef.value.validateInput())
+      console.log('result', result)
     }
     return {
       list: testData,
@@ -69,8 +68,7 @@ export default defineComponent({
       emailVal,
       passwordVal,
       passwordRules,
-      onFormSubmit,
-      inputRef
+      onFormSubmit
     }
   }
 })
