@@ -13,14 +13,16 @@
       <div class="mb-3">
         <label class="form-label">文章详情：</label>
         <validate-input
-          type="password"
+          rows="10"
+          type="text"
+          tag="textarea"
           placeholder="请输入文章详情"
           :rules="contentRules"
           v-model="contentVal"
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-large">创建</button>
+        <button class="btn btn-primary btn-large">发表文章</button>
       </template>
     </validate-form>
   </div>
@@ -30,6 +32,7 @@
 import { defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { GlobalDataProps, PostProps } from '../store'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 
@@ -42,7 +45,7 @@ export default defineComponent({
   setup() {
     const titleVal = ref('')
     const router = useRouter()
-    const store = useStore()
+    const store = useStore<GlobalDataProps>()
     const titleRules: RulesProp = [
       { type: 'required', message: '文章标题不能为空' }
     ]
@@ -52,8 +55,18 @@ export default defineComponent({
     ]
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        router.push('/')
-        store.commit('login')
+        const { columnId } = store.state.user
+        if (columnId) {
+          const newPost: PostProps = {
+            id: new Date().getTime(),
+            title: titleVal.value,
+            content: contentVal.value,
+            columnId,
+            createdAt: new Date().toLocaleString()
+          }
+          store.commit('createPost', newPost)
+          router.push({ name: 'column', params: { id: columnId } })
+        }
       }
     }
     return {
