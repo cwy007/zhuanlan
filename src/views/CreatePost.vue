@@ -14,7 +14,6 @@
         <label class="form-label">文章详情：</label>
         <validate-input
           rows="10"
-          type="text"
           tag="textarea"
           placeholder="请输入文章详情"
           :rules="contentRules"
