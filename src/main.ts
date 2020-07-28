@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 
 import App from './App.vue'
-
 axios.defaults.baseURL = 'http://localhost:7001/api/'
 const app = createApp(App)
 app.use(router)
