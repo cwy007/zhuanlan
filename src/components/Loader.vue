@@ -1,4 +1,5 @@
 <template>
+<teleport to="#back">
   <div
     class="d-flex justify-content-center align-items-center h-100 w-100 loading-container"
     :style="{backgroundColor: background || ''}"
@@ -10,10 +11,11 @@
       <p v-if="text" class="text-primary small">{{text}}</p>
     </div>
   </div>
+</teleport>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onUnmounted } from 'vue'
 
 export default defineComponent({
   props: {
@@ -23,6 +25,14 @@ export default defineComponent({
     background: {
       type: String
     }
+  },
+  setup() {
+    const node = document.createElement('div')
+    node.id = 'back'
+    document.body.appendChild(node)
+    onUnmounted(() => {
+      document.body.removeChild(node)
+    })
   }
 })
 </script>
