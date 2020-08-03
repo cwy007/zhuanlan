@@ -28,8 +28,13 @@ export interface PostProps {
   createdAt: string;
   column: string;
 }
+export interface GlobalErrorProps {
+  status: boolean;
+  message?: string;
+}
 export interface GlobalDataProps {
   token: string;
+  error: GlobalErrorProps;
   loading: boolean;
   columns: ColumnProps[];
   posts: PostProps[];
@@ -47,6 +52,7 @@ const postAndCommit = async (url: string, mutationName: string, commit: Commit, 
 const store = createStore<GlobalDataProps>({
   state: {
     token: localStorage.getItem('token') || '',
+    error: { status: false },
     loading: false,
     columns: [],
     posts: [],
@@ -70,6 +76,9 @@ const store = createStore<GlobalDataProps>({
     },
     setLoading(state, status) {
       state.loading = status
+    },
+    setError(state, e: GlobalErrorProps) {
+      state.error = e
     },
     fetchCurrentUser(state, rawData) {
       state.user = { isLogin: true, ...rawData.data }
