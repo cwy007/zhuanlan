@@ -42,7 +42,7 @@ export default defineComponent({
     })
     const list = computed(() => store.state.columns)
     const beforeUpload = (file: File) => {
-      const isJPG = file.type === 'image/jpeg'
+      const isJPG = file.type === 'image/png'
       if (!isJPG) {
         createMessage('上传图片只能是 JPG 格式!', 'error')
       }
