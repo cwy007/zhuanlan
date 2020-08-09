@@ -16,6 +16,7 @@ export interface ImageProps {
   _id?: string;
   url?: string;
   createdAt?: string;
+  fitUrl?: string;
 }
 export interface ColumnProps {
   _id: string;
@@ -47,6 +48,7 @@ export interface GlobalDataProps {
 const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
   const { data } = await axios.get(url)
   commit(mutationName, data)
+  return data
 }
 const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
   try {
@@ -100,16 +102,16 @@ const store = createStore<GlobalDataProps>({
   },
   actions: {
     fetchColumns({ commit }) {
-      getAndCommit('/columns', 'fetchColumns', commit)
+      return getAndCommit('/columns', 'fetchColumns', commit)
     },
     fetchColumn({ commit }, cid) {
-      getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
+      return getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
     },
     fetchPosts({ commit }, cid) {
-      getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
+      return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
     fetchCurrentUser({ commit }) {
-      getAndCommit('/user/current', 'fetchCurrentUser', commit)
+      return getAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
     login({ commit }, payload) {
       return postAndCommit('/user/login', 'login', commit, payload)

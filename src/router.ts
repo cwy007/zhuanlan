@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import axios from 'axios'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Signup from './views/Signup.vue'
@@ -40,13 +41,35 @@ const router = createRouter({
   ]
 })
 router.beforeEach((to, from, next) => {
-  console.log(to.meta)
-  if (to.meta.requiredLogin && !store.state.user.isLogin) {
-    next({ name: 'login' })
-  } else if (to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
-    next('/')
+  const { user, token } = store.state
+  const { requiredLogin, redirectAlreadyLogin } = to.meta
+  if (!user.isLogin) {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      store.dispatch('fetchCurrentUser').then(() => {
+        if (redirectAlreadyLogin) {
+          next('/')
+        } else {
+          next()
+        }
+      }).catch(e => {
+        console.error(e)
+        localStorage.removeItem('token')
+        next('login')
+      })
+    } else {
+      if (requiredLogin) {
+        next('login')
+      } else {
+        next()
+      }
+    }
   } else {
-    next()
+    if (redirectAlreadyLogin) {
+      next('/')
+    } else {
+      next()
+    }
   }
 })
 
