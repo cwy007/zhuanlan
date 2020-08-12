@@ -17,7 +17,7 @@
 
 import { defineComponent, PropType, computed } from 'vue'
 import { ColumnProps } from '../store'
-import { generateFitUrl } from '../helper'
+import { addColumnAvatar } from '../helper'
 
 export default defineComponent({
   name: 'ColumnList',
@@ -30,7 +30,7 @@ export default defineComponent({
   setup(props) {
     const columnList = computed(() => {
       return props.list.map(column => {
-        generateFitUrl(column, 50, 50)
+        addColumnAvatar(column, 50, 50)
         return column
       })
     })
