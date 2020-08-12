@@ -11,6 +11,8 @@ export interface UserProps {
   _id?: string;
   column?: string;
   email?: string;
+  avatar?: ImageProps;
+  description?: string;
 }
 export interface ImageProps {
   _id?: string;
@@ -81,6 +83,9 @@ const store = createStore<GlobalDataProps>({
     fetchPosts(state, rawData) {
       state.posts = rawData.data.list
     },
+    fetchPost(state, rawData) {
+      state.posts = [rawData.data]
+    },
     setLoading(state, status) {
       state.loading = status
     },
@@ -112,6 +117,9 @@ const store = createStore<GlobalDataProps>({
     fetchPosts({ commit }, cid) {
       return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
+    fetchPost({ commit }, id) {
+      return getAndCommit(`/posts/${id}`, 'fetchPost', commit)
+    },
     fetchCurrentUser({ commit }) {
       return getAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
@@ -133,6 +141,9 @@ const store = createStore<GlobalDataProps>({
     },
     getPostsByCid: (state) => (cid: string) => {
       return state.posts.filter(post => post.column === cid)
+    },
+    getCurrentPost: (state) => (id: string) => {
+      return state.posts.find(post => post._id === id)
     }
   }
 })
