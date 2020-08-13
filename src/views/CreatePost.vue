@@ -40,16 +40,16 @@
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-large">发表文章</button>
+        <button class="btn btn-primary btn-large">{{isEditMode ? '更新文章' : '发表文章'}}</button>
       </template>
     </validate-form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '../store'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
@@ -67,7 +67,9 @@ export default defineComponent({
   setup() {
     const titleVal = ref('')
     const router = useRouter()
+    const route = useRoute()
     const store = useStore<GlobalDataProps>()
+    const isEditMode = !!route.query.id
     let imageId = ''
     const titleRules: RulesProp = [
       { type: 'required', message: '文章标题不能为空' }
@@ -76,6 +78,15 @@ export default defineComponent({
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    onMounted(() => {
+      if (isEditMode) {
+        store.dispatch('fetchPost', route.query.id).then((rawData: ResponseType<PostProps>) => {
+          const currentPost = rawData.data
+          titleVal.value = currentPost.title
+          contentVal.value = currentPost.content || ''
+        })
+      }
+    })
     const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
       if (rawData.data._id) {
         imageId = rawData.data._id
@@ -121,7 +132,8 @@ export default defineComponent({
       contentRules,
       onFormSubmit,
       uploadCheck,
-      handleFileUploaded
+      handleFileUploaded,
+      isEditMode
     }
   }
 })

@@ -4,18 +4,16 @@
       v-if="tag !== 'textarea'"
       class="form-control"
       :class="{'is-invalid': inputRef.error}"
-      :value="inputRef.val"
+      v-model="inputVal"
       @blur="validateInput"
-      @input="updateValue"
       v-bind="$attrs"
     >
     <textarea
       v-else
       class="form-control"
       :class="{'is-invalid': inputRef.error}"
-      :value="inputRef.val"
+      v-model="inputVal"
       @blur="validateInput"
-      @input="updateValue"
       v-bind="$attrs"
     >
     </textarea>
@@ -24,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { defineComponent, reactive, PropType, onMounted, computed } from 'vue'
 import { emitter } from './ValidateForm.vue'
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 interface RuleProp {
@@ -45,11 +43,18 @@ export default defineComponent({
   },
   inheritAttrs: false,
   setup(props, context) {
+    const inputVal = computed({
+      get: () => props.modelValue || '',
+      set: val => {
+        context.emit('update:modelValue', val)
+      }
+    })
     const inputRef = reactive({
       val: props.modelValue || '',
       error: false,
       message: ''
     })
+
     const updateValue = (e: KeyboardEvent) => {
       const targetValue = (e.target as HTMLInputElement).value
       inputRef.val = targetValue
@@ -60,12 +65,13 @@ export default defineComponent({
         const allPassed = props.rules.every(rule => {
           let passed = true
           inputRef.message = rule.message
+          const { value } = inputVal
           switch (rule.type) {
             case 'required':
-              passed = (inputRef.val.trim() !== '')
+              passed = (value.trim() !== '')
               break
             case 'email':
-              passed = emailReg.test(inputRef.val)
+              passed = emailReg.test(value)
               break
             case 'custom':
               passed = rule.validator ? rule.validator() : true
@@ -86,7 +92,8 @@ export default defineComponent({
     return {
       inputRef,
       validateInput,
-      updateValue
+      updateValue,
+      inputVal
     }
   }
 })
