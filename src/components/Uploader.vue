@@ -41,7 +41,6 @@ export default defineComponent({
   emits: ['file-uploaded', 'file-uploaded-error'],
   setup(props, context) {
     const fileInput = ref<null | HTMLInputElement>(null)
-    console.log(props.uploaded)
     const fileStatus = ref<UploadStatus>(props.uploaded ? 'success' : 'ready')
     const uploadedData = ref(props.uploaded)
     watch(() => props.uploaded, (newValue) => {
