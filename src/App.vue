@@ -25,6 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from './components/GlobalHeader.vue'
 import Loader from './components/Loader.vue'
 import createMessage from './components/createMessage'
+
 import { GlobalDataProps } from './store'
 export default defineComponent({
   name: 'App',
