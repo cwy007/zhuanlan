@@ -6,6 +6,13 @@
       :visible="modalIsVisible"
     >
     </modal>
+    <nav aria-label="breadcrumb" v-if="currentPost">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><router-link to="/">首页</router-link></li>
+        <li class="breadcrumb-item"><router-link :to="`/column/${currentPost.column}`">专栏首页</router-link></li>
+        <li class="breadcrumb-item active" aria-current="page">{{currentPost.title}}</li>
+      </ol>
+    </nav>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <img :src="currentImageUrl" alt="currentPost.title" class="rounded-lg img-fluid my-4" v-if="currentImageUrl">
       <h2 class="mb-4">{{currentPost.title}}</h2>

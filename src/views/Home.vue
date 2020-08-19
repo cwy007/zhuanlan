@@ -21,6 +21,7 @@ import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store'
 import ColumnList from '../components/ColumnList.vue'
+import { objToArr } from '../helper'
 
 export default defineComponent({
   name: 'Home',
@@ -32,7 +33,7 @@ export default defineComponent({
     onMounted(() => {
       store.dispatch('fetchColumns')
     })
-    const list = computed(() => store.state.columns)
+    const list = computed(() => objToArr(store.state.columns.data))
     return {
       list
     }
