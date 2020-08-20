@@ -3,7 +3,7 @@
     <h4>{{isEditMode ? '编辑文章' : '新建文章'}}</h4>
     <uploader
       action="/upload"
-      :beforeUpload="uploadCheck"
+      :beforeUpload="commonUploadCheck"
       @file-uploaded="handleFileUploaded"
       :uploaded="uploadedData"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
@@ -59,7 +59,7 @@ import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import Uploader from '../components/Uploader.vue'
 import createMessage from '../components/createMessage'
-import { beforeUploadCheck } from '../helper'
+import { commonUploadCheck } from '../helper'
 export default defineComponent({
   name: 'Login',
   components: {
@@ -126,24 +126,14 @@ export default defineComponent({
         }
       }
     }
-    const uploadCheck = (file: File) => {
-      const result = beforeUploadCheck(file, { format: ['image/jpeg', 'image/png'], size: 1 })
-      const { passed, error } = result
-      if (error === 'format') {
-        createMessage('上传图片只能是 JPG/PNG 格式!', 'error')
-      }
-      if (error === 'size') {
-        createMessage('上传图片大小不能超过 1Mb', 'error')
-      }
-      return passed
-    }
+
     return {
       titleRules,
       titleVal,
       contentVal,
       contentRules,
       onFormSubmit,
-      uploadCheck,
+      commonUploadCheck,
       handleFileUploaded,
       isEditMode,
       uploadedData
