@@ -36,6 +36,7 @@ export interface PostProps {
   createdAt?: string;
   column: string;
   author?: string | UserProps;
+  isHTML?: boolean;
 }
 export interface GlobalErrorProps {
   status: boolean;
@@ -46,12 +47,12 @@ interface ListProps<P> {
 }
 export interface GlobalColumnsProps {
   data: ListProps<ColumnProps>;
-  loaded: boolean;
+  currentPage: number;
+  total?: number;
 }
 export interface GlobalPostsProps {
   data: ListProps<PostProps>;
-  loadedColumns: string[];
-  loadedDetails: string[];
+  loadedColumns: ListProps<{total?: number; currentPage?: number}>;
 }
 export interface GlobalDataProps {
   token: string;
@@ -79,8 +80,8 @@ const store = createStore<GlobalDataProps>({
     token: localStorage.getItem('token') || '',
     error: { status: false },
     loading: false,
-    columns: { data: {}, loaded: false },
-    posts: { data: {}, loadedColumns: [], loadedDetails: [] },
+    columns: { data: {}, currentPage: 0 },
+    posts: { data: {}, loadedColumns: {} },
     user: { isLogin: false }
   },
   mutations: {
@@ -89,9 +90,11 @@ const store = createStore<GlobalDataProps>({
     },
     fetchColumns(state, rawData) {
       const { data } = state.columns
+      const { list, count, currentPage } = rawData.data
       state.columns = {
-        data: { ...data, ...arrToObj(rawData.data.list) },
-        loaded: true
+        data: { ...data, ...arrToObj(list) },
+        currentPage: currentPage * 1,
+        total: count
       }
     },
     fetchColumn(state, { data }) {
@@ -102,9 +105,13 @@ const store = createStore<GlobalDataProps>({
     },
     fetchPosts(state, { data: rawData, extraData }) {
       const { data, loadedColumns } = state.posts
-      const listData = rawData.data.list as PostProps[]
+      const { list, count, currentPage } = rawData.data
+      const listData = list as PostProps[]
       state.posts.data = { ...data, ...arrToObj(listData) }
-      state.posts.loadedColumns = [...loadedColumns, extraData]
+      loadedColumns[extraData] = {
+        total: count,
+        currentPage
+      }
     },
     fetchPost(state, { data }) {
       state.posts.data[data._id] = data
@@ -141,9 +148,10 @@ const store = createStore<GlobalDataProps>({
     }
   },
   actions: {
-    fetchColumns({ commit, state }) {
-      if (!state.columns.loaded) {
-        return asyncAndCommit('/columns', 'fetchColumns', commit)
+    fetchColumns({ commit, state }, params = {}) {
+      const { currentPage = 1, pageSize = 5 } = params
+      if (state.columns.currentPage < currentPage) {
+        return asyncAndCommit(`/columns?currentPage=${currentPage}&pageSize=${pageSize}`, 'fetchColumns', commit)
       }
     },
     fetchColumn({ commit, state }, cid) {
@@ -152,10 +160,13 @@ const store = createStore<GlobalDataProps>({
         return asyncAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
       }
     },
-    fetchPosts({ commit, state }, cid) {
+    fetchPosts({ commit, state }, params = {}) {
+      const { cid, currentPage = 1, pageSize = 5 } = params
       const { loadedColumns } = state.posts
-      if (!loadedColumns.includes(cid)) {
-        return asyncAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit, { method: 'get' }, cid)
+      const loadedCurentPage = (loadedColumns[cid] && loadedColumns[cid].currentPage) || 0
+      if (!Object.keys(loadedColumns).includes(cid) || loadedCurentPage < currentPage) {
+        return asyncAndCommit(`/columns/${cid}/posts?currentPage=${currentPage}&pageSize=${pageSize}`,
+          'fetchPosts', commit, { method: 'get' }, cid)
       }
     },
     fetchPost({ commit, state }, id) {
@@ -206,6 +217,20 @@ const store = createStore<GlobalDataProps>({
     },
     getCurrentPost: (state) => (id: string) => {
       return state.posts.data[id]
+    },
+    getPostsCountByCid: (state) => (cid: string) => {
+      if (state.posts.loadedColumns[cid]) {
+        return state.posts.loadedColumns[cid].total
+      } else {
+        return 0
+      }
+    },
+    getPostsCurrentPageByCid: (state) => (cid: string) => {
+      if (state.posts.loadedColumns[cid]) {
+        return state.posts.loadedColumns[cid].currentPage
+      } else {
+        return 0
+      }
     }
   }
 })
