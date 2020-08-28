@@ -1,5 +1,5 @@
 <template>
-  <div class="update-profile-page">
+  <div class="update-profile-page w-690">
     <ul class="nav nav-tabs my-4">
       <li class="nav-item">
         <a href="#"
