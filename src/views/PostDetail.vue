@@ -1,5 +1,11 @@
 <template>
   <div class="post-detail-page">
+    <modal title="删除文章" :visible="modalIsVisible"
+      @modal-on-close="modalIsVisible = false"
+      @modal-on-confirm="modalIsVisible = false"
+    >
+      <p>确定要删除这篇文章吗？</p>
+    </modal>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <img :src="currentImageUrl" alt="currentPost.title" class="rounded-lg img-fluid my-4" v-if="currentImageUrl">
       <h2 class="mb-4">{{currentPost.title}}</h2>
@@ -18,28 +24,31 @@
         >
           编辑
         </router-link>
-        <button type="button" class="btn btn-danger">删除</button>
+        <button type="button" class="btn btn-danger" @click.prevent="modalIsVisible = true">删除</button>
       </div>
     </article>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, onMounted, computed, ref } from 'vue'
 import MarkdownIt from 'markdown-it'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { GlobalDataProps, PostProps, ImageProps, UserProps } from '../store'
 import UserProfile from '../components/UserProfile.vue'
+import Modal from '../components/Modal.vue'
 
 export default defineComponent({
   name: 'post-detail',
   components: {
-    UserProfile
+    UserProfile,
+    Modal
   },
   setup() {
     const store = useStore<GlobalDataProps>()
     const route = useRoute()
+    const modalIsVisible = ref(false)
     const currentId = route.params.id
     const md = new MarkdownIt()
     onMounted(() => {
@@ -72,7 +81,8 @@ export default defineComponent({
       currentPost,
       currentImageUrl,
       currentHTML,
-      showEditArea
+      showEditArea,
+      modalIsVisible
     }
   }
 })
