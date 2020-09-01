@@ -19,6 +19,9 @@
           :rules="passwordRules"
           v-model="passwordVal"
         />
+        <div class="form-text">
+          <router-link to="/signup">还没有账户？去注册一个新的吧！</router-link>
+        </div>
       </div>
       <template #submit>
         <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>

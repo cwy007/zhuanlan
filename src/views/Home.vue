@@ -6,7 +6,7 @@
           <img src="../assets/callout.svg" alt="callout" class="w-50"/>
           <h2 class="font-weight-light">随心写作，自由表达</h2>
           <p>
-            <a href="#" class="btn btn-primary my-2">开始写文章</a>
+            <a href="#" class="btn btn-primary my-2" @click.prevent="createOrLogin">开始写文章</a>
           </p>
         </div>
       </div>
@@ -25,6 +25,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { GlobalDataProps } from '../store'
 import ColumnList from '../components/ColumnList.vue'
 import { objToArr } from '../helper'
@@ -37,6 +38,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore<GlobalDataProps>()
+    const router = useRouter()
     const totalColumns = computed(() => store.state.columns.total || 0)
     const currentPage = computed(() => store.state.columns.currentPage || 0)
     onMounted(() => {
@@ -44,11 +46,21 @@ export default defineComponent({
     })
     const list = computed(() => objToArr(store.state.columns.data))
     const { loadMorePage, isLastPage } = useLoadMore('fetchColumns', totalColumns, { currentPage: currentPage.value })
+
+    const createOrLogin = () => {
+      const isLogin = store.state.user.isLogin
+      if (!isLogin) {
+        router.push('/login')
+      } else {
+        router.push('/create')
+      }
+    }
     return {
       list,
       loadMorePage,
       isLastPage,
-      totalColumns
+      totalColumns,
+      createOrLogin
     }
   }
 })
