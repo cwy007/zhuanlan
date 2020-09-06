@@ -138,8 +138,11 @@ const store = createStore<GlobalDataProps>({
       }
     },
     fetchPost({ state, commit }, id) {
-      if (!state.posts.data[id]) {
+      const currentPost = state.posts.data[id]
+      if (!currentPost || !currentPost.content) {
         return asyncAndCommit(`/posts/${id}`, 'fetchPost', commit)
+      } else {
+        return Promise.resolve({ data: currentPost })
       }
     },
     updatePost({ commit }, { id, payload }) {
