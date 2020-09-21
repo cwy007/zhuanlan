@@ -45,7 +45,7 @@ export default defineComponent({
       store.dispatch('fetchColumns')
     })
     const list = computed(() => objToArr(store.state.columns.data))
-    const { loadMorePage, isLastPage } = useLoadMore('fetchColumns', totalColumns, { currentPage: currentPage.value })
+    const { loadMorePage, isLastPage } = useLoadMore('fetchColumns', totalColumns, { currentPage: currentPage.value }, 6)
 
     const createOrLogin = () => {
       const isLogin = store.state.user.isLogin
