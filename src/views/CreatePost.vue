@@ -61,7 +61,7 @@ import Uploader from '../components/Uploader.vue'
 import createMessage from '../components/createMessage'
 import { commonUploadCheck } from '../helper'
 export default defineComponent({
-  name: 'Login',
+  name: 'CreatePost',
   components: {
     ValidateInput,
     ValidateForm,
