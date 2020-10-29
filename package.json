@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bootstrap": "^5.0.0-alpha1",
+    "bootstrap": "^5.0.0-alpha2",
     "core-js": "^3.6.5",
     "markdown-it": "^11.0.0",
     "mitt": "^2.1.0",
