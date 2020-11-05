@@ -10,21 +10,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from 'vue'
+import { defineComponent, onUnmounted, provide } from 'vue'
 import mitt from 'mitt'
 type ValidateFunc = () => boolean
+interface CallbackProps {
+  validator: ValidateFunc;
+  formName: string;
+}
 export const emitter = mitt()
 export default defineComponent({
   emits: ['form-submit'],
+  props: {
+    // 请提供不同的 formName 当使用多个表单在同一个页面中的时候
+    name: {
+      type: String,
+      default: 'default'
+    }
+  },
   setup(props, context) {
+    provide('formName', props.name)
     let funcArr: ValidateFunc[] = []
     const submitForm = () => {
       const result = funcArr.map(func => func()).every(result => result)
       context.emit('form-submit', result)
     }
-    const callback = (func?: ValidateFunc) => {
-      if (func) {
-        funcArr.push(func)
+    const callback = (obj?: CallbackProps) => {
+      if (obj && obj.formName === props.name) {
+        funcArr.push(obj.validator)
       }
     }
     emitter.on('form-item-created', callback)
