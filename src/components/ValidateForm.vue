@@ -11,21 +11,26 @@
 
 <script lang="ts">
 import { defineComponent, onUnmounted } from 'vue'
-import mitt from 'mitt'
+import mitt, { Handler } from 'mitt'
 export const emitter = mitt()
-
+type ValidateFunc = () => boolean
 export default defineComponent({
   emits: ['form-submit'],
   setup (props, context) {
+    let funcArr: ValidateFunc[] = []
     const submitForm = () => {
-      context.emit('form-submit', true)
+      const result = funcArr.map(func => func()).every(result => result)
+      context.emit('form-submit', result)
     }
-    const callback = (test: string | undefined) => {
-      console.log(test)
+    // 引入 Handler 解决下面的问题
+    // TS2769: No overload matches this call.
+    const callback: Handler = (func: ValidateFunc) => {
+      funcArr.push(func)
     }
     emitter.on('form-item-created', callback)
     onUnmounted(() => {
       emitter.off('form-item-created', callback)
+      funcArr = []
     })
 
     return {
