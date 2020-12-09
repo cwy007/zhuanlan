@@ -27,3 +27,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 * [Typescript 中的 interface 和 type 到底有什么区别详解](https://www.jb51.net/article/163299.htm)
 * [Error: Cannot find module 'vue-loader-v16/package.json'](https://stackoverflow.com/questions/63504594/error-cannot-find-module-vue-loader-v16-package-json)
+
+>Module '"../node_modules/vue-router/types"' has no exported member 'createWebHistory'. Did you mean to use 'import createWebHistory from "../node_modules/vue-router/types"' instead?ts(2614)
+>解决方法：使用 4.0 以上版本
+>npm i -S vue-router@next

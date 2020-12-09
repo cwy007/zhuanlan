@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <global-header :user="currentUser"></global-header>
-    <!-- <router-view /> -->
+    <router-view />
     <footer class="text-center py-4 text-muted bg-light mt-6">
       <small>
         <ul class="list-inline mb-0">
