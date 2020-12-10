@@ -45,7 +45,7 @@ const getAndCommit = async (url: string, mutationName: string, commit: Commit) =
   commit(mutationName, data)
   return data
 }
-const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
+const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: object) => {
   const { data } = await axios.post(url, payload)
   commit(mutationName, data)
   return data
@@ -53,7 +53,7 @@ const postAndCommit = async (url: string, mutationName: string, commit: Commit, 
 
 const store = createStore<GlobalDataProps>({
   state: {
-    token: '',
+    token: localStorage.getItem('token') || '',
     loading: false,
     columns: [],
     posts: [],
@@ -78,6 +78,7 @@ const store = createStore<GlobalDataProps>({
     login (state, rawData) {
       const { token } = rawData.data
       state.token = token
+      localStorage.setItem('token', token)
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
     fetchCurrentUser (state, rawData) {

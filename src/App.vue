@@ -18,11 +18,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from './components/Globalheader.vue'
 import Loading from '@/components/Loading.vue'
+import { GlobalDataProps } from '@/store'
 
 export default defineComponent({
   name: 'App',
@@ -31,9 +33,16 @@ export default defineComponent({
     Loading
   },
   setup () {
-    const store = useStore()
+    const store = useStore<GlobalDataProps>()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    const token = computed(() => store.state.token)
+    onMounted(() => {
+      if (!currentUser.value.isLogin && token.value) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token.value}`
+        store.dispatch('fetchCurrentUser')
+      }
+    })
     return {
       currentUser,
       isLoading
