@@ -1,30 +1,3 @@
-# zhuanlan
-
-## Project setup
-
-```shell
-npm install
-npm run serve
-npm run build
-npm run lint
-```
-
-## api
-
-[后端API swagger 文档](http://api.vikingship.xyz/public/swagger/index.html)
-
-* 获取专栏列表
-
-```js
-// icode 有时效性
-http://apis.imooc.com/api/columns?icode=A51C3975141CD028
-
-```
-
-<details>
-  <summary>GET /api/columns</summary>
-  <pre>
-```json
 {
   "code": 0,
   "data": {
@@ -104,21 +77,3 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
   },
   "msg": "请求成功"
 }
-```
-  </pre>
-</details>
-
-## 参考
-
-* [Typescript 中的 interface 和 type 到底有什么区别详解](https://www.jb51.net/article/163299.htm)
-* [Error: Cannot find module 'vue-loader-v16/package.json'](https://stackoverflow.com/questions/63504594/error-cannot-find-module-vue-loader-v16-package-json)
-
-* 解决方法：使用 4.0 以上版本
-
->Module '"../node_modules/vue-router/types"' has no exported member 'createWebHistory'. Did you mean to use 'import createWebHistory from "../node_modules/vue-router/types"' instead?ts(2614)
->
->npm i -S vue-router@next
-
-* 解决方法：去掉 `type="textarea"`，然后，强制刷新浏览器，报错消失
-
->[Vue warn]: Failed setting prop "type" on `<textarea>`: value textarea is invalid. TypeError: Cannot set property type of `#<HTMLTextAreaElement>`which has only a getter
