@@ -108,6 +108,14 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
   </pre>
 </details>
 
+/user/login
+
+```js
+// 测试账号
+111@test.com
+111111
+```
+
 ## 参考
 
 * [Typescript 中的 interface 和 type 到底有什么区别详解](https://www.jb51.net/article/163299.htm)
