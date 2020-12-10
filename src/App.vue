@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <global-header :user="currentUser"></global-header>
-    <h1 v-if="isLoading">正在读取 😄</h1>
-    <Loading text="拼命加载中" background="rgba(0,0,0,0.5)"></Loading>
+    <Loading v-if="isLoading" text="拼命加载中"></Loading>
     <router-view />
     <footer class="text-center py-4 text-muted bg-light mt-6">
       <small>
