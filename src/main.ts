@@ -14,9 +14,6 @@ axios.interceptors.request.use(config => {
   }
   return config
 })
-axios.get('/columns').then((res) => {
-  console.log(res.data)
-})
 
 const app = createApp(App)
 app.use(router)

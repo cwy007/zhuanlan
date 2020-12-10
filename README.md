@@ -119,6 +119,6 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
 >
 >npm i -S vue-router@next
 
-* 解决方法：去掉 `type="textarea"`，然后，强制刷新浏览器，报错消失
+* 解决方法：去掉 `type="text"`，然后，强制刷新浏览器，报错消失
 
 >[Vue warn]: Failed setting prop "type" on `<textarea>`: value textarea is invalid. TypeError: Cannot set property type of `#<HTMLTextAreaElement>`which has only a getter
