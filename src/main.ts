@@ -7,6 +7,7 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
+  store.commit('setError', { status: false, message: '' })
   config.params = { ...config.params, icode: 'A51C3975141CD028' }
   if (config.data instanceof FormData) {
     config.data.append('icode', 'A51C3975141CD028')
