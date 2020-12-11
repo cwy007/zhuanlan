@@ -10,7 +10,7 @@ export interface ResponseType<P = {}> {
 export interface UserProps {
   isLogin: boolean;
   nickName?: string;
-  _id?: number;
+  _id?: string;
   column: string;
   email?: string;
 }
@@ -34,9 +34,10 @@ export interface PostProps {
   title: string;
   excerpt?: string;
   content?: string;
-  image?: string;
+  image?: ImageProps | string;
   createdAt?: string;
   column: string;
+  author?: string;
 }
 
 export interface GlobalErrorProps {
@@ -61,6 +62,7 @@ const getAndCommit = async (url: string, mutationName: string, commit: Commit) =
 const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: object) => {
   const { data } = await axios.post(url, payload)
   commit(mutationName, data)
+  console.log('data', data)
   return data
 }
 
@@ -71,7 +73,7 @@ const store = createStore<GlobalDataProps>({
     loading: false,
     columns: [],
     posts: [],
-    user: { isLogin: false, column: '1' }
+    user: { isLogin: false, column: '5f3e86d62c56ee13bb83096c' }
   },
   mutations: {
     createPost (state, newPost) {
@@ -105,7 +107,7 @@ const store = createStore<GlobalDataProps>({
       state.error = e
     },
     fetchCurrentUser (state, rawData) {
-      state.user = { isLogin: true, ...rawData.data }
+      state.user = { ...state.user, isLogin: true, ...rawData.data }
     }
   },
   actions: {
@@ -128,6 +130,9 @@ const store = createStore<GlobalDataProps>({
       return dispatch('login', payload).then(() => {
         return dispatch('fetchCurrentUser')
       })
+    },
+    createPost ({ commit }, payload) {
+      return postAndCommit('/posts', 'createPost', commit, payload)
     }
   },
   getters: {

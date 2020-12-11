@@ -3,6 +3,8 @@
     <h4>新建文章</h4>
     <uploader
       action="/upload"
+      :beforeUpload="uploadCheck"
+      @file-uploaded="handleFileUploaded"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
     >
       <h2>点击上传头图</h2>
@@ -51,8 +53,10 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
-import { GlobalDataProps, PostProps } from '@/store'
 import Uploader from '@/components/Uploader.vue'
+import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '@/store'
+import { beforeUploadCheck } from '@/helpers'
+import createMessage from '@/components/createMessage'
 
 export default defineComponent({
   name: 'CreatePost',
@@ -62,6 +66,7 @@ export default defineComponent({
     Uploader
   },
   setup () {
+    let imgId = ''
     const titleVal = ref('')
     const contentVal = ref('')
     const store = useStore<GlobalDataProps>()
@@ -72,17 +77,47 @@ export default defineComponent({
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    const uploadCheck = (file: File) => {
+      const result = beforeUploadCheck(file, { format: ['image/jpeg', 'image/png'], size: 1 })
+      const { passed, error } = result
+      if (error === 'format') {
+        createMessage('上传图片只能是 JPG/PNG 格式！', 'error')
+      }
+      if (error === 'size') {
+        createMessage('上传图片的大小不能超过1 Mb', 'error')
+      }
+      return passed
+    }
+    const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
+      if (rawData.data._id) {
+        imgId = rawData.data._id
+      }
+    }
     const onFormSubmit = (result: boolean) => {
+      console.log('result', result)
+
       if (result) {
-        const { column } = store.state.user
+        const { column, _id: author } = store.state.user
+        console.log('column', column)
+
         if (column) {
           const newPost: PostProps = {
             title: titleVal.value,
             content: contentVal.value,
-            column
+            column,
+            author
           }
-          store.commit('createPost', newPost)
-          router.push({ name: 'column', params: { id: column } })
+          if (imgId) {
+            newPost.image = imgId
+          }
+          console.log('newPost', newPost)
+
+          store.dispatch('createPost', newPost).then(() => {
+            createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
+            setTimeout(() => {
+              router.push({ name: 'column', params: { id: column } })
+            }, 2000)
+          })
         }
       }
     }
@@ -92,6 +127,8 @@ export default defineComponent({
       contentVal,
       titleRules,
       contentRules,
+      uploadCheck,
+      handleFileUploaded,
       onFormSubmit
     }
   }
