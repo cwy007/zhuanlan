@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
         redirectAlreadyLogin ? next('/') : next()
       }).catch(e => {
         console.error(e)
-        localStorage.removeItem('token')
+        store.commit('logout')
         next('/login')
       })
     } else {

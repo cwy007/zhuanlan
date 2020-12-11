@@ -66,7 +66,7 @@ export default defineComponent({
           createMessage('登录成功', 'success')
           router.push('/')
         }).catch(e => {
-          createMessage('e.error', 'error')
+          createMessage(e.error, 'error')
         })
       }
     }
