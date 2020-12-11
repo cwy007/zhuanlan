@@ -1,6 +1,7 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
+    <input type="file" name="file" @change.prevent="handleFileChange"/>
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="from-label">文章标题：</label>
@@ -35,6 +36,7 @@ import { useRouter } from 'vue-router'
 import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 import { GlobalDataProps, PostProps } from '@/store'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'CreatePost',
@@ -56,15 +58,29 @@ export default defineComponent({
     const onFormSubmit = (result: boolean) => {
       if (result) {
         const { column } = store.state.user
-        const newPost: PostProps = {
-          _id: new Date().getTime().toString(),
-          title: titleVal.value,
-          content: contentVal.value,
-          column: column,
-          createdAt: new Date().toLocaleString()
+        if (column) {
+          const newPost: PostProps = {
+            title: titleVal.value,
+            content: contentVal.value,
+            column
+          }
+          store.commit('createPost', newPost)
+          router.push({ name: 'column', params: { id: column } })
         }
-        store.commit('createPost', newPost)
-        router.push({ name: 'column', params: { id: column } })
+      }
+    }
+    const handleFileChange = (e: Event) => {
+      const target = e.target as HTMLInputElement
+      const files = target.files
+      if (files) {
+        const uploadedFile = files[0] // 类型 File
+        const formData = new FormData()
+        formData.append(uploadedFile.name, uploadedFile) // uploadedFile 为 binary
+        axios.post('/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        }).then((resp) => {
+          console.log(resp)
+        })
       }
     }
     return {
@@ -72,7 +88,8 @@ export default defineComponent({
       contentVal,
       titleRules,
       contentRules,
-      onFormSubmit
+      onFormSubmit,
+      handleFileChange
     }
   }
 })
