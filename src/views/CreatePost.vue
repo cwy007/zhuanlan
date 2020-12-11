@@ -94,8 +94,6 @@ export default defineComponent({
       }
     }
     const onFormSubmit = (result: boolean) => {
-      console.log('result', result)
-
       if (result) {
         const { column, _id: author } = store.state.user
         console.log('column', column)
