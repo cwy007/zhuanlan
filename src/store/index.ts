@@ -18,6 +18,7 @@ export interface UserProps {
 export interface ImageProps {
   _id?: string;
   url?: string;
+  fitUrl?: string;
   createdAt?: string;
 }
 
