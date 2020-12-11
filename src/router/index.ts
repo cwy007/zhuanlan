@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import axios from 'axios'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import ColumnDetail from '@/views/ColumnDetail.vue'
@@ -42,12 +43,23 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiredLogin && !store.state.user.isLogin) {
-    next({ name: 'login' })
-  } else if (to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
-    next({ path: '/' })
+  const { user, token } = store.state // 页面刷新时，这里获取到的是store中的默认值
+  const { requiredLogin, redirectAlreadyLogin } = to.meta
+  if (!user.isLogin) {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      store.dispatch('fetchCurrentUser').then(() => {
+        redirectAlreadyLogin ? next('/') : next()
+      }).catch(e => {
+        console.error(e)
+        localStorage.removeItem('token')
+        next('/login')
+      })
+    } else {
+      requiredLogin ? next('/login') : next()
+    }
   } else {
-    next()
+    redirectAlreadyLogin ? next('/') : next()
   }
 })
 
