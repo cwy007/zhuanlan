@@ -2,7 +2,7 @@
   <div class="container">
     <global-header :user="currentUser"></global-header>
     <Loading v-if="isLoading" text="拼命加载中"></Loading>
-    <h1>{{error.message}}</h1>
+    <message type="error" :message="error.message" v-if="error.status"></message>
     <router-view />
     <footer class="text-center py-4 text-muted bg-light mt-6">
       <small>
@@ -26,12 +26,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from './components/Globalheader.vue'
 import Loading from '@/components/Loading.vue'
 import { GlobalDataProps } from '@/store'
+import Message from '@/components/Message.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    Loading
+    Loading,
+    Message
   },
   setup () {
     const store = useStore<GlobalDataProps>()
