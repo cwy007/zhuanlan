@@ -1,5 +1,6 @@
 <template>
-  <div class="login-page">
+  <div class="login-page mx-auto p-3 w-330">
+    <h5 class="my-4 text-center">登录到者也</h5>
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
@@ -19,6 +20,11 @@
           type="password"
         />
       </div>
+      <template #submit>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary btn-lg">登录</button>
+        </div>
+      </template>
     </validate-form>
   </div>
 </template>
@@ -60,7 +66,7 @@ export default defineComponent({
           createMessage('登录成功', 'success')
           router.push('/')
         }).catch(e => {
-          console.log(e)
+          createMessage('e.error', 'error')
         })
       }
     }
@@ -75,3 +81,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.w-330 {
+  max-width: 330px;
+}
+</style>

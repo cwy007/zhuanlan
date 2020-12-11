@@ -3,6 +3,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import ColumnDetail from '@/views/ColumnDetail.vue'
 import CreatePost from '@/views/CreatePost.vue'
+import Signup from '@/views/Signup.vue'
 import store from '@/store'
 
 const routerHistory = createWebHistory()
@@ -13,6 +14,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: Signup,
+      meta: { redirectAlreadyLogin: true }
     },
     {
       path: '/login',
@@ -35,10 +42,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (!store.state.user.isLogin && to.meta.requiredLogin) {
+  if (to.meta.requiredLogin && !store.state.user.isLogin) {
     next({ name: 'login' })
-  } else if (store.state.user.isLogin && to.meta.redirectAlreadyLogin) {
-    next('/')
+  } else if (to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
+    next({ path: '/' })
   } else {
     next()
   }
