@@ -12,11 +12,15 @@
       </div>
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
-    <uploader action="/upload1"
+    <uploader action="/upload"
       :beforeUpload="beforeUpload"
       @file-uploaded="onFileUploaded"
       @file-uploaded-error="onFileUploadedError"
-    />
+    >
+      <template #uploaded="{ uploadedData }">
+        <img :src="uploadedData.data.url" class="w-100">
+      </template>
+    </uploader>
     <column-list :list="list"></column-list>
   </div>
 </template>
@@ -42,7 +46,6 @@ export default defineComponent({
     })
     const list = computed(() => store.state.columns)
     const beforeUpload = (file: File) => {
-      console.log('file.type', file.type)
       const isJPG = file.type === 'image/jpeg'
       if (!isJPG) {
         createMessage('上传的图片只能是 JPG 格式', 'error')
