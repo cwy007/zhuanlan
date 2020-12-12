@@ -4,7 +4,7 @@
       title="删除文章"
       :visible="modalIsVisible"
       @modal-on-close="modalIsVisible = false"
-      @modal-on-confirm="modalIsVisible = false"
+      @modal-on-confirm="hideAndDelete"
     >
       <p>确定要删除这篇文章吗？</p>
     </modal>
@@ -28,7 +28,7 @@
         </span>
       </div>
       <div v-html="currentHTML"></div>
-      <div class="btn-group mt-5">
+      <div class="btn-group mt-5 d-block">
         <router-link
           class="btn btn-success"
           :to="{name: 'create', query: { id: currentPost._id }}"
@@ -36,6 +36,9 @@
           编辑
         </router-link>
         <button type="button" class="btn btn-danger" @click.prevent="modalIsVisible = true">删除</button>
+        <router-link :to="`/column/${currentPost.column}`" class="btn btn-light">
+          返回专栏
+        </router-link>
       </div>
     </article>
   </div>
@@ -44,11 +47,18 @@
 <script lang="ts">
 import { defineComponent, onMounted, computed, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import MarkdownIt from 'markdown-it'
-import { GlobalDataProps, PostProps, ImageProps, UserProps } from '@/store'
+import {
+  GlobalDataProps,
+  PostProps,
+  ImageProps,
+  UserProps,
+  ResponseType
+} from '@/store'
 import UserProfile from '@/components/UserProfile.vue'
 import Modal from '@/components/Modal.vue'
+import createMessage from '@/components/createMessage'
 
 export default defineComponent({
   name: 'PostDetail',
@@ -58,6 +68,7 @@ export default defineComponent({
   },
   setup () {
     const modalIsVisible = ref(false)
+    const router = useRouter()
     const store = useStore<GlobalDataProps>()
     const route = useRoute()
     const currentId = route.params.id
@@ -87,12 +98,22 @@ export default defineComponent({
       }
       return false
     })
+    const hideAndDelete = () => {
+      modalIsVisible.value = false
+      store.dispatch('deletePost', currentId).then((rawData: ResponseType<PostProps>) => {
+        createMessage('删除成功, 2秒后跳转到专栏首页', 'success', 2000)
+        setTimeout(() => {
+          router.push({ name: 'column', params: { id: rawData.data.column } })
+        }, 2000)
+      })
+    }
     return {
       currentPost,
       currentImageUrl,
       currentHTML,
       showEditArea,
-      modalIsVisible
+      modalIsVisible,
+      hideAndDelete
     }
   }
 })

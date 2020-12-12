@@ -97,6 +97,9 @@ const store = createStore<GlobalDataProps>({
         return post._id === data._id ? data : post
       })
     },
+    deletePost (state, { data }) {
+      state.posts = state.posts.filter(post => post._id !== data._id)
+    },
     setLoading (state, rawData) {
       state.loading = rawData
     },
@@ -143,6 +146,9 @@ const store = createStore<GlobalDataProps>({
         method: 'patch',
         data: payload
       })
+    },
+    deletePost ({ commit }, id) {
+      return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
     },
     login ({ commit }, payload) {
       return asyncAndCommit('/user/login', 'login', commit, {
