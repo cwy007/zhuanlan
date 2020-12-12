@@ -1,6 +1,6 @@
 <template>
   <div class="create-post-page">
-    <h4>新建文章</h4>
+    <h4>{{isEditMode ? '编辑文章' : '新建文章'}}</h4>
     <uploader
       action="/upload"
       :beforeUpload="uploadCheck"
@@ -47,7 +47,9 @@
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-lg mb-4">发表文章</button>
+        <button class="btn btn-primary btn-lg mb-4">
+          {{isEditMode ? '更新文章' : '发表文章'}}
+        </button>
       </template>
     </validate-form>
   </div>
@@ -117,8 +119,6 @@ export default defineComponent({
     const onFormSubmit = (result: boolean) => {
       if (result) {
         const { column, _id: author } = store.state.user
-        console.log('column', column)
-
         if (column) {
           const newPost: PostProps = {
             title: titleVal.value,
@@ -129,9 +129,13 @@ export default defineComponent({
           if (imgId) {
             newPost.image = imgId
           }
-          console.log('newPost', newPost)
+          const actionName = isEditMode ? 'updatePost' : 'createPost'
+          const sendData = isEditMode ? {
+            id: route.query.id,
+            payload: newPost
+          } : newPost
 
-          store.dispatch('createPost', newPost).then(() => {
+          store.dispatch(actionName, sendData).then(() => {
             createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
             setTimeout(() => {
               router.push({ name: 'column', params: { id: column } })
@@ -149,7 +153,8 @@ export default defineComponent({
       uploadCheck,
       handleFileUploaded,
       onFormSubmit,
-      uploadedData
+      uploadedData,
+      isEditMode
     }
   }
 })

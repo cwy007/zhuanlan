@@ -1,6 +1,5 @@
 <template>
   <div class="validate-input-container pb-3">
-    <h2>{{inputRef.val}}</h2>
     <input
       v-if="tag !== 'textarea'"
       class="form-control"
