@@ -1,5 +1,13 @@
 <template>
   <div class="post-detail-page">
+    <modal
+      title="删除文章"
+      :visible="modalIsVisible"
+      @modal-on-close="modalIsVisible = false"
+      @modal-on-confirm="modalIsVisible = false"
+    >
+      <p>确定要删除这篇文章吗？</p>
+    </modal>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <img
         v-if="currentImageUrl"
@@ -27,24 +35,29 @@
         >
           编辑
         </router-link>
-        <button type="button" class="btn btn-danger">删除</button>
+        <button type="button" class="btn btn-danger" @click.prevent="modalIsVisible = true">删除</button>
       </div>
     </article>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, onMounted, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import MarkdownIt from 'markdown-it'
 import { GlobalDataProps, PostProps, ImageProps, UserProps } from '@/store'
 import UserProfile from '@/components/UserProfile.vue'
+import Modal from '@/components/Modal.vue'
 
 export default defineComponent({
   name: 'PostDetail',
-  components: { UserProfile },
+  components: {
+    UserProfile,
+    Modal
+  },
   setup () {
+    const modalIsVisible = ref(false)
     const store = useStore<GlobalDataProps>()
     const route = useRoute()
     const currentId = route.params.id
@@ -78,7 +91,8 @@ export default defineComponent({
       currentPost,
       currentImageUrl,
       currentHTML,
-      showEditArea
+      showEditArea,
+      modalIsVisible
     }
   }
 })
