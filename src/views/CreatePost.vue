@@ -5,6 +5,7 @@
       action="/upload"
       :beforeUpload="uploadCheck"
       @file-uploaded="handleFileUploaded"
+      :uploaded="uploadedData"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
     >
       <h2>点击上传头图</h2>
@@ -17,7 +18,12 @@
         </div>
       </template>
       <template #uploaded="{ uploadedData }">
-        <img :src="uploadedData.data.url" alt="">
+        <!-- <img :src="uploadedData.data.url"> -->
+
+        <div class="uploaded-area">
+          <img :src="uploadedData.data.url">
+          <h3>点击重新上传</h3>
+        </div>
       </template>
     </uploader>
     <validate-form @form-submit="onFormSubmit">
@@ -48,13 +54,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '@/store'
 import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 import Uploader from '@/components/Uploader.vue'
-import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '@/store'
 import { beforeUploadCheck } from '@/helpers'
 import createMessage from '@/components/createMessage'
 
@@ -66,17 +72,32 @@ export default defineComponent({
     Uploader
   },
   setup () {
+    const uploadedData = ref()
     let imgId = ''
     const titleVal = ref('')
     const contentVal = ref('')
     const store = useStore<GlobalDataProps>()
     const router = useRouter()
+    const route = useRoute()
+    const isEditMode = !!route.query.id
     const titleRules: RulesProp = [
       { type: 'required', message: '文章标题不能为空' }
     ]
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    onMounted(() => {
+      if (isEditMode) {
+        store.dispatch('fetchPost', route.query.id).then((rawData: ResponseType<PostProps>) => {
+          const currentPost = rawData.data
+          if (currentPost.image) {
+            uploadedData.value = { data: currentPost.image }
+          }
+          titleVal.value = currentPost.title
+          contentVal.value = currentPost.content || ''
+        })
+      }
+    })
     const uploadCheck = (file: File) => {
       const result = beforeUploadCheck(file, { format: ['image/jpeg', 'image/png'], size: 1 })
       const { passed, error } = result
@@ -127,7 +148,8 @@ export default defineComponent({
       contentRules,
       uploadCheck,
       handleFileUploaded,
-      onFormSubmit
+      onFormSubmit,
+      uploadedData
     }
   }
 })
@@ -137,10 +159,26 @@ export default defineComponent({
 .create-post-page >>> .file-upload-container {
   height: 200px;
   cursor: pointer;
+  overflow: hidden;
 }
-.create-post-page >>> .file-upload-container img {
+.create-post-page >>> .file-upload-container .uploaded-area {
+  height: 200px;
+  position: relative;
+}
+.create-post-page >>> .file-upload-container .uploaded-area img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+}
+.create-post-page >>> .file-upload-container .uploaded-area h3 {
+  display: none;
+}
+.create-post-page >>> .file-upload-container .uploaded-area:hover h3 {
+  display: block;
+  position: absolute;
+  color: #999;
+  text-align: center;
+  width: 100%;
+  top: 50%;
 }
 </style>
