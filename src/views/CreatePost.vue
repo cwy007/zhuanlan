@@ -43,7 +43,7 @@
           rows="10"
           :rules="contentRules"
           v-model="contentVal"
-          placeholder="请输入文章标题"
+          placeholder="请输入文章详情，支持Markdown语法"
         />
       </div>
       <template #submit>
