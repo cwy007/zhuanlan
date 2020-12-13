@@ -1,5 +1,10 @@
 import { createStore, Commit } from 'vuex'
 import axios, { AxiosRequestConfig } from 'axios'
+import { arrToObj, objToArr } from '@/helpers'
+
+interface ListProps<P> {
+  [id: string]: P;
+}
 
 export interface ResponseType<P = {}> {
   code: number;
@@ -40,6 +45,7 @@ export interface PostProps {
   createdAt?: string;
   column: string;
   author?: UserProps | string;
+  isHTML?: boolean;
 }
 
 export interface GlobalErrorProps {
@@ -51,8 +57,8 @@ export interface GlobalDataProps {
   token: string;
   error: GlobalErrorProps;
   loading: boolean;
-  columns: ColumnProps[];
-  posts: PostProps[];
+  columns: ListProps<ColumnProps>;
+  posts: ListProps<PostProps>;
   user: UserProps;
 }
 
@@ -72,33 +78,31 @@ const store = createStore<GlobalDataProps>({
     token: localStorage.getItem('token') || '',
     error: { status: false },
     loading: false,
-    columns: [],
-    posts: [],
+    columns: {},
+    posts: {},
     user: { isLogin: false, column: '5f3e86d62c56ee13bb83096c' }
   },
   mutations: {
     fetchColumns (state, rawData) {
-      state.columns = rawData.data.list
+      state.columns = arrToObj(rawData.data.list)
     },
     fetchColumn (state, rawData) {
-      state.columns = [rawData.data]
+      state.columns[rawData.data._id] = rawData.data
     },
     fetchPosts (state, rawData) {
-      state.posts = rawData.data.list
+      state.posts = arrToObj(rawData.data.list)
     },
     fetchPost (state, rawData) {
-      state.posts = [rawData.data]
+      state.posts[rawData.data._id] = rawData.data
     },
-    createPost (state, newPost) {
-      state.posts.push(newPost)
+    createPost (state, rawData) {
+      state.posts[rawData.data._id] = rawData.data
     },
     updatePost (state, { data }) {
-      state.posts = state.posts.map(post => {
-        return post._id === data._id ? data : post
-      })
+      state.posts[data._id] = data
     },
     deletePost (state, { data }) {
-      state.posts = state.posts.filter(post => post._id !== data._id)
+      delete state.posts[data._id]
     },
     setLoading (state, rawData) {
       state.loading = rawData
@@ -166,14 +170,17 @@ const store = createStore<GlobalDataProps>({
     }
   },
   getters: {
+    getColumns: (state) => {
+      return objToArr(state.columns)
+    },
     getColumnById: (state) => (id: string) => {
-      return state.columns.find(c => c._id === id)
+      return state.columns[id]
     },
     getPostsByCid: (state) => (cid: string) => {
-      return state.posts.filter(post => post.column === cid)
+      return objToArr(state.posts).filter(post => post.column === cid)
     },
     getCurrentPost: (state) => (id: string) => {
-      return state.posts.find(post => post._id === id)
+      return state.posts[id]
     }
   }
 })

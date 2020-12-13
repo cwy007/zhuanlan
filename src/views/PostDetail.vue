@@ -86,8 +86,10 @@ export default defineComponent({
       }
     })
     const currentHTML = computed(() => {
-      if (currentPost.value && currentPost.value.content) {
-        return md.render(currentPost.value.content)
+      // TODO: isHTML
+      const { isHTML, content } = currentPost.value
+      if (currentPost.value && content) {
+        return isHTML ? content : md.render(content)
       }
     })
     const showEditArea = computed(() => {
