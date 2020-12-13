@@ -86,7 +86,7 @@ export default defineComponent({
       }
     })
     const currentHTML = computed(() => {
-      // TODO: isHTML
+      // isHTML 为 post 详情接口返回的数据
       const { isHTML, content } = currentPost.value
       if (currentPost.value && content) {
         return isHTML ? content : md.render(content)
