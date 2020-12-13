@@ -139,3 +139,4 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
 * [Vue style 深度作用选择器 >>> 与 /deep/（sass/less）](https://www.cnblogs.com/CyLee/p/10006065.html)
 * [有作用域的 CSS](https://vue-loader.vuejs.org/zh/guide/scoped-css.html#%E6%B7%B1%E5%BA%A6%E4%BD%9C%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8)
 *[可索引的类型](https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types)
+*[vue cli 3.x 项目部署到 github pages](https://www.cnblogs.com/stevexu/archive/2019/04/16/10720106.html)
