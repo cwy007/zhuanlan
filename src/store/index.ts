@@ -44,7 +44,7 @@ export interface PostProps {
   image?: ImageProps | string;
   createdAt?: string;
   column: string;
-  author?: UserProps | string;
+  author?: UserProps | string; // 列表接口和详情接口返回的内容不同，列表接口只返回id
   isHTML?: boolean;
 }
 
@@ -150,8 +150,12 @@ const store = createStore<GlobalDataProps>({
       }
     },
     fetchPost ({ state, commit }, id) {
-      if (!state.posts.data[id]) {
+      const currentPost = state.posts.data[id]
+      // /posts列表接口不返回content字段
+      if (!currentPost || !currentPost.content) {
         return asyncAndCommit(`/posts/${id}`, 'fetchPost', commit)
+      } else {
+        return Promise.resolve({ data: currentPost })
       }
     },
     createPost ({ commit }, payload) {
