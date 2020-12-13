@@ -57,7 +57,7 @@ export interface GlobalDataProps {
   token: string;
   error: GlobalErrorProps;
   loading: boolean;
-  columns: { data: ListProps<ColumnProps>; isLoaded: boolean; total: number };
+  columns: { data: ListProps<ColumnProps>; currentPage: number; total: number };
   posts: { data: ListProps<PostProps>; loadedColumns: string[] };
   user: UserProps;
 }
@@ -83,18 +83,18 @@ const store = createStore<GlobalDataProps>({
     token: localStorage.getItem('token') || '',
     error: { status: false },
     loading: false,
-    columns: { data: {}, isLoaded: false, total: 0 },
+    columns: { data: {}, currentPage: 0, total: 0 },
     posts: { data: {}, loadedColumns: [] },
     user: { isLogin: false, column: '5f3e86d62c56ee13bb83096c' }
   },
   mutations: {
     fetchColumns (state, rawData) {
       const { data } = state.columns
-      const { list, count } = rawData.data
+      const { list, count, currentPage } = rawData.data
       state.columns = {
         data: { ...data, ...arrToObj(list) },
         total: count,
-        isLoaded: true
+        currentPage: currentPage * 1 // str to number
       }
     },
     fetchColumn (state, rawData) {
@@ -141,13 +141,12 @@ const store = createStore<GlobalDataProps>({
   actions: {
     fetchColumns ({ state, commit }, params = {}) {
       const { currentPage = 1, pageSize = 6 } = params
-      // if (!state.columns.isLoaded) {
-      //   return asyncAndCommit('columns', 'fetchColumns', commit)
-      // }
-      return asyncAndCommit(
-        `/columns?currentPage=${currentPage}&pageSize=${pageSize}`,
-        'fetchColumns', commit
-      )
+      if (state.columns.currentPage < currentPage) {
+        return asyncAndCommit(
+          `/columns?currentPage=${currentPage}&pageSize=${pageSize}`,
+          'fetchColumns', commit
+        )
+      }
     },
     fetchColumn ({ state, commit }, cid) {
       if (!state.columns.data[cid]) {

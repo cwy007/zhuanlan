@@ -28,7 +28,7 @@
         </span>
       </div>
       <div v-html="currentHTML"></div>
-      <div class="btn-group mt-5 d-block">
+      <div class="btn-group mt-5 d-block" v-if="showEditArea">
         <router-link
           class="btn btn-success"
           :to="{name: 'create', query: { id: currentPost._id }}"
