@@ -100,6 +100,9 @@ const store = createStore<GlobalDataProps>({
     fetchColumn (state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data
     },
+    updateColumn (state, { data }) {
+      state.columns.data[data._id] = data
+    },
     fetchPosts (state, { data: rawData, extraData: columnId }) {
       state.posts.data = { ...state.posts.data, ...arrToObj(rawData.data.list) }
       state.posts.loadedColumns.push(columnId)
@@ -118,6 +121,9 @@ const store = createStore<GlobalDataProps>({
     },
     setLoading (state, rawData) {
       state.loading = rawData
+    },
+    updateUser (state, { data }) {
+      state.user = { isLogin: true, ...data }
     },
     login (state, rawData) {
       const { token } = rawData.data
@@ -181,6 +187,12 @@ const store = createStore<GlobalDataProps>({
     },
     deletePost ({ commit }, id) {
       return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, { method: 'delete' })
+    },
+    updateColumn ({ commit }, { id, payload }) {
+      return asyncAndCommit(`/columns/${id}`, 'updateColumn', commit, { method: 'patch', data: payload })
+    },
+    updateUser ({ commit }, { id, payload }) {
+      return asyncAndCommit(`/user/${id}`, 'updateUser', commit, { method: 'patch', data: payload })
     },
     login ({ commit }, payload) {
       return asyncAndCommit('/user/login', 'login', commit, {

@@ -7,10 +7,11 @@
       <small>
         <ul class="list-inline mb-0">
           <li class="list-inline-item">@ 2020 者也专栏</li>
-          <li class="list-inline-item">课程</li>
-          <li class="list-inline-item">文档</li>
-          <li class="list-inline-item">联系</li>
-          <li class="list-inline-item">更多</li>
+          <li class="list-inline-item">
+            <a class="text-muted" href="https://github.com/cwy007/zhuanlan" target="_blank">
+              github source code
+            </a>
+          </li>
         </ul>
       </small>
     </footer>

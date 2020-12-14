@@ -1,10 +1,5 @@
 # zhuanlan
 
-* **项目演示站点：[http://zhihu.vikingship.xyz/](http://zhihu.vikingship.xyz/)**
-* 在线后端API 查询和使用站点：[http://api.vikingship.xyz/](http://api.vikingship.xyz/)
-* 项目在线文档：[http://docs.vikingship.xyz/](http://docs.vikingship.xyz/)
-* 完成的组件库展示：[http://showcase.vikingship.xyz/](http://showcase.vikingship.xyz/)
-
 ## Project setup
 
 ```shell
@@ -13,6 +8,17 @@ npm run serve
 npm run build
 npm run lint
 ```
+
+## 在线查看
+
+[https://cwy007.github.io/zhuanlan/](https://cwy007.github.io/zhuanlan/)
+
+## 文档
+
+* **项目演示站点：[http://zhihu.vikingship.xyz/](http://zhihu.vikingship.xyz/)**
+* 在线后端API 查询和使用站点：[http://api.vikingship.xyz/](http://api.vikingship.xyz/)
+* 项目在线文档：[http://docs.vikingship.xyz/](http://docs.vikingship.xyz/)
+* 完成的组件库展示：[http://showcase.vikingship.xyz/](http://showcase.vikingship.xyz/)
 
 ## api
 
@@ -141,3 +147,6 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
 *[可索引的类型](https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types)
 *[vue cli 3.x 项目部署到 github pages](https://www.cnblogs.com/stevexu/archive/2019/04/16/10720106.html)
 *[vue路由history模式刷新页面一片空白，也不报错](https://blog.csdn.net/weixin_45295253/article/details/102958906?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)
+*[Github Pages 中部署 SPA（路由单页应用）](https://leader.js.cool/basic/knowledge/github-pages-spa-router/)
+*[github page 404](https://github.com/isaacs/github/issues/408#issuecomment-216721113)
+*[S(GH)PA: The Single-Page App Hack For GitHub Pages](https://www.smashingmagazine.com/2016/08/sghpa-single-page-app-hack-github-pages/)

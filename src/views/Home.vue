@@ -13,13 +13,15 @@
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
-    <button
-      v-if="!isLastPage"
-      class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25"
-      @click="loadMorePage"
-    >
-      加载更多
-    </button>
+    <div class="d-flex justify-content-center">
+      <button
+        v-if="!isLastPage"
+        class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25"
+        @click="loadMorePage"
+      >
+        加载更多
+      </button>
+    </div>
   </div>
 </template>
 
@@ -43,11 +45,11 @@ export default defineComponent({
       return currentPage > 0 ? currentPage + 1 : 2
     })
     onMounted(() => {
-      store.dispatch('fetchColumns', { pageSize: 3 })
+      store.dispatch('fetchColumns', { pageSize: 6 })
     })
     const list = computed(() => store.getters.getColumns)
     const { loadMorePage, isLastPage } = useLoadMore(
-      'fetchColumns', total, { currentPage: currentPage.value, pageSize: 3 }
+      'fetchColumns', total, { currentPage: currentPage.value, pageSize: 6 }
     )
 
     return {

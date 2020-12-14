@@ -6,9 +6,12 @@ import ColumnDetail from '@/views/ColumnDetail.vue'
 import CreatePost from '@/views/CreatePost.vue'
 import Signup from '@/views/Signup.vue'
 import PostDetail from '@/views/PostDetail.vue'
+import EditProfile from '@/views/EditProfile.vue'
 import store from '@/store'
 
-const routerHistory = createWebHistory('/zhuanlan')
+// github pages
+const base = process.env.NODE_ENV === 'production' ? '/zhuanlan' : '/'
+const routerHistory = createWebHistory(base)
 const router = createRouter({
   history: routerHistory,
   routes: [
@@ -44,6 +47,12 @@ const router = createRouter({
       path: '/posts/:id',
       name: 'post',
       component: PostDetail
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: EditProfile,
+      meta: { requiredLogin: true }
     }
   ]
 })
