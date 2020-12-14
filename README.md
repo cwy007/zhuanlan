@@ -13,6 +13,56 @@ npm run lint
 
 [https://cwy007.github.io/zhuanlan/](https://cwy007.github.io/zhuanlan/)
 
+## 页面
+
+* 注册页面
+
+>/signup
+
+![signup](https://tva1.sinaimg.cn/large/0081Kckwly1glnmopm0yej30rs0f70u1.jpg)
+
+* 登录页面
+
+>/login
+
+![login](https://tva1.sinaimg.cn/large/0081Kckwly1glnmp589ftj30rs0azjsa.jpg)
+
+* 首页
+
+> /
+
+![home](https://tva1.sinaimg.cn/large/0081Kckwly1glnmpdnun2j30rs0r4dk9.jpg)
+
+* 专栏详情页
+
+>/column/:id
+
+![column](https://tva1.sinaimg.cn/large/0081Kckwly1glnmpntl83j30rs18adsi.jpg)
+
+* 文章详情页
+
+> /posts/:id
+
+![post](https://tva1.sinaimg.cn/large/0081Kckwly1glnmqwu805j30rs0wbgqa.jpg)
+
+* 文章编辑页
+
+> /create?id=5fd74eb0b558154f0392ba10
+
+![editPost](https://tva1.sinaimg.cn/large/0081Kckwly1glnmr878pcj30rs0hnjtj.jpg)
+
+* 新建文章页面
+
+> /create
+
+![createPost](https://tva1.sinaimg.cn/large/0081Kckwly1glnmrfk2yrj30rs0hnwfp.jpg)
+
+* 编辑资料页面
+
+> /profile
+
+![profile](https://tva1.sinaimg.cn/large/0081Kckwly1glnmrj8a09j30rs0fcmz5.jpg)
+
 ## 文档
 
 * **项目演示站点：[http://zhihu.vikingship.xyz/](http://zhihu.vikingship.xyz/)**
@@ -144,9 +194,9 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
 
 * [Vue style 深度作用选择器 >>> 与 /deep/（sass/less）](https://www.cnblogs.com/CyLee/p/10006065.html)
 * [有作用域的 CSS](https://vue-loader.vuejs.org/zh/guide/scoped-css.html#%E6%B7%B1%E5%BA%A6%E4%BD%9C%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8)
-*[可索引的类型](https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types)
-*[vue cli 3.x 项目部署到 github pages](https://www.cnblogs.com/stevexu/archive/2019/04/16/10720106.html)
-*[vue路由history模式刷新页面一片空白，也不报错](https://blog.csdn.net/weixin_45295253/article/details/102958906?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)
-*[Github Pages 中部署 SPA（路由单页应用）](https://leader.js.cool/basic/knowledge/github-pages-spa-router/)
-*[github page 404](https://github.com/isaacs/github/issues/408#issuecomment-216721113)
-*[S(GH)PA: The Single-Page App Hack For GitHub Pages](https://www.smashingmagazine.com/2016/08/sghpa-single-page-app-hack-github-pages/)
+* [可索引的类型](https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types)
+* [vue cli 3.x 项目部署到 github pages](https://www.cnblogs.com/stevexu/archive/2019/04/16/10720106.html)
+* [vue路由history模式刷新页面一片空白，也不报错](https://blog.csdn.net/weixin_45295253/article/details/102958906?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)
+* [Github Pages 中部署 SPA（路由单页应用）](https://leader.js.cool/basic/knowledge/github-pages-spa-router/)
+* [github page 404](https://github.com/isaacs/github/issues/408#issuecomment-216721113)
+* [S(GH)PA: The Single-Page App Hack For GitHub Pages](https://www.smashingmagazine.com/2016/08/sghpa-single-page-app-hack-github-pages/)
