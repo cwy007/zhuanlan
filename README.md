@@ -140,3 +140,4 @@ http://apis.imooc.com/api/columns?icode=A51C3975141CD028
 * [有作用域的 CSS](https://vue-loader.vuejs.org/zh/guide/scoped-css.html#%E6%B7%B1%E5%BA%A6%E4%BD%9C%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8)
 *[可索引的类型](https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types)
 *[vue cli 3.x 项目部署到 github pages](https://www.cnblogs.com/stevexu/archive/2019/04/16/10720106.html)
+*[vue路由history模式刷新页面一片空白，也不报错](https://blog.csdn.net/weixin_45295253/article/details/102958906?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)

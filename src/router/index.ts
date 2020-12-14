@@ -8,7 +8,8 @@ import Signup from '@/views/Signup.vue'
 import PostDetail from '@/views/PostDetail.vue'
 import store from '@/store'
 
-const routerHistory = createWebHistory()
+const base = process.env.NODE_ENV === 'production' ? '/zhuanlan' : '/'
+const routerHistory = createWebHistory(base)
 const router = createRouter({
   history: routerHistory,
   routes: [
