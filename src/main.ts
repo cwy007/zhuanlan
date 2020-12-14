@@ -4,7 +4,7 @@ import store from '@/store'
 import App from './App.vue'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://apis.imooc.com/api/'
+axios.defaults.baseURL = 'https://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, message: '' })
