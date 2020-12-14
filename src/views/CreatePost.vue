@@ -21,7 +21,7 @@
         <!-- <img :src="uploadedData.data.url"> -->
 
         <div class="uploaded-area">
-          <img :src="uploadedData.data.url">
+          <img :src="uploadedData.data && uploadedData.data.url">
           <h3>点击重新上传</h3>
         </div>
       </template>
@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps, PostProps, ResponseType, ImageProps } from '@/store'
@@ -88,6 +88,13 @@ export default defineComponent({
     const contentRules: RulesProp = [
       { type: 'required', message: '文章详情不能为空' }
     ]
+    watch(() => route.query.id, () => {
+      if (!route.query.id) {
+        uploadedData.value = {}
+        titleVal.value = ''
+        contentVal.value = ''
+      }
+    })
     onMounted(() => {
       if (isEditMode) {
         store.dispatch('fetchPost', route.query.id).then((rawData: ResponseType<PostProps>) => {
