@@ -3,28 +3,35 @@ import { ref, computed, ComputedRef } from 'vue'
 import { useStore } from 'vuex'
 
 interface LoadParams {
-  currentPage: number;
-  pageSize: number;
+  currentPage?: number;
+  pageSize?: number;
+  [key: string]: any;
 }
 
 const useLoadMore = (
   actionName: string,
   total: ComputedRef<number>,
-  params: LoadParams = { currentPage: 2, pageSize: 5 }
+  params: LoadParams = {},
+  pageSize = 5
 ) => {
   const store = useStore()
-  const currentPage = ref(params.currentPage)
-  const requestParams = computed(() => ({
-    currentPage: currentPage.value, // 这里要使用响应式数据
-    pageSize: params.pageSize
-  }))
+  // current page should equals 1, start from the second page
+  const currentPage = ref((params && params.currentPage) || 1)
+  const requestParams = computed(() => {
+    return {
+      ...params,
+      currentPage: currentPage.value + 1
+    }
+  })
+
+  // function to trigger load more
   const loadMorePage = () => {
     store.dispatch(actionName, requestParams.value).then(() => {
       currentPage.value++
     })
   }
   const isLastPage = computed(() => {
-    return Math.ceil(total.value / params.pageSize) < currentPage.value // 当前页面大于总数
+    return Math.ceil((total.value || 1) / pageSize) === currentPage.value
   })
   return {
     loadMorePage,
