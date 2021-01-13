@@ -8,11 +8,11 @@ axios.defaults.baseURL = 'https://apis.imooc.com/api/'
 axios.interceptors.request.use(config => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, message: '' })
-  config.params = { ...config.params, icode: 'A51C3975141CD028' }
+  config.params = { ...config.params, icode: 'D7EE1A7033012A3C' }
   if (config.data instanceof FormData) {
-    config.data.append('icode', 'A51C3975141CD028')
+    config.data.append('icode', 'D7EE1A7033012A3C')
   } else {
-    config.data = { ...config.data, icode: 'A51C3975141CD028' }
+    config.data = { ...config.data, icode: 'D7EE1A7033012A3C' }
   }
   return config
 })
